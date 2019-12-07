@@ -8,6 +8,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import warnings
+from Vertex import Vertex
+from Sudoku import Sudoku
+from AdjacencyMatrix import AdjacencyMatrix
+from SudokuHelper import SudokuHelper
+warnings.filterwarnings("ignore")
 
 
 class Ui_MainWindow(object):
@@ -19,98 +25,86 @@ class Ui_MainWindow(object):
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(220, 40, 421, 381))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+
         self.SudokuToSolve = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.SudokuToSolve.setContentsMargins(0, 0, 0, 0)
         self.SudokuToSolve.setObjectName("SudokuToSolve")
+
         self.tableWidget = QtWidgets.QTableWidget(self.gridLayoutWidget)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(0)
+
         self.SudokuToSolve.addWidget(self.tableWidget, 0, 0, 1, 1)
         self.Dimension = QtWidgets.QGroupBox(self.centralwidget)
         self.Dimension.setGeometry(QtCore.QRect(20, 30, 191, 181))
+
         font = QtGui.QFont()
         font.setFamily("Bodoni MT")
-        font.setPointSize(14)
+        font.setPointSize(15)
+
         self.Dimension.setFont(font)
         self.Dimension.setObjectName("Dimension")
         self.Btn16x16 = QtWidgets.QRadioButton(self.Dimension)
         self.Btn16x16.setGeometry(QtCore.QRect(20, 130, 91, 31))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(15)
         self.Btn16x16.setFont(font)
         self.Btn16x16.setObjectName("Btn16x16")
+
         self.buttonGroup = QtWidgets.QButtonGroup(MainWindow)
         self.buttonGroup.setObjectName("buttonGroup")
         self.buttonGroup.addButton(self.Btn16x16)
         self.Btn4x4 = QtWidgets.QRadioButton(self.Dimension)
         self.Btn4x4.setGeometry(QtCore.QRect(20, 50, 91, 31))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(15)
         self.Btn4x4.setFont(font)
         self.Btn4x4.setObjectName("Btn4x4")
         self.buttonGroup.addButton(self.Btn4x4)
         self.Btn9x9 = QtWidgets.QRadioButton(self.Dimension)
         self.Btn9x9.setGeometry(QtCore.QRect(20, 90, 91, 31))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(15)
         self.Btn9x9.setFont(font)
         self.Btn9x9.setObjectName("Btn9x9")
+
         self.buttonGroup.addButton(self.Btn9x9)
         self.Difficulty = QtWidgets.QGroupBox(self.centralwidget)
         self.Difficulty.setGeometry(QtCore.QRect(20, 240, 191, 181))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(14)
         self.Difficulty.setFont(font)
         self.Difficulty.setObjectName("Difficulty")
         self.BtnImpossible = QtWidgets.QRadioButton(self.Difficulty)
         self.BtnImpossible.setGeometry(QtCore.QRect(20, 130, 141, 31))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(15)
         self.BtnImpossible.setFont(font)
         self.BtnImpossible.setObjectName("BtnImpossible")
         self.BtnSimple = QtWidgets.QRadioButton(self.Difficulty)
         self.BtnSimple.setGeometry(QtCore.QRect(20, 50, 91, 31))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(15)
         self.BtnSimple.setFont(font)
         self.BtnSimple.setObjectName("BtnSimple")
         self.BtnHard = QtWidgets.QRadioButton(self.Difficulty)
         self.BtnHard.setGeometry(QtCore.QRect(20, 90, 91, 31))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(15)
         self.BtnHard.setFont(font)
         self.BtnHard.setObjectName("BtnHard")
+
         self.gridLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
         self.gridLayoutWidget_2.setGeometry(QtCore.QRect(660, 40, 421, 381))
         self.gridLayoutWidget_2.setObjectName("gridLayoutWidget_2")
+
         self.SudokuSolved = QtWidgets.QGridLayout(self.gridLayoutWidget_2)
         self.SudokuSolved.setContentsMargins(0, 0, 0, 0)
         self.SudokuSolved.setObjectName("SudokuSolved")
+
         self.tableWidget_2 = QtWidgets.QTableWidget(self.gridLayoutWidget_2)
         self.tableWidget_2.setObjectName("tableWidget_2")
         self.tableWidget_2.setColumnCount(0)
         self.tableWidget_2.setRowCount(0)
+
         self.SudokuSolved.addWidget(self.tableWidget_2, 0, 0, 1, 1)
         self.OutputText = QtWidgets.QTextEdit(self.centralwidget)
         self.OutputText.setGeometry(QtCore.QRect(20, 510, 1061, 181))
         self.OutputText.setObjectName("OutputText")
         self.OutputLabel = QtWidgets.QLabel(self.centralwidget)
         self.OutputLabel.setGeometry(QtCore.QRect(20, 490, 81, 21))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(14)
         self.OutputLabel.setFont(font)
         self.OutputLabel.setObjectName("OutputLabel")
         self.StatusLabel = QtWidgets.QLabel(self.centralwidget)
         self.StatusLabel.setGeometry(QtCore.QRect(20, 440, 151, 31))
+
         font = QtGui.QFont()
         font.setFamily("Bodoni MT")
         font.setPointSize(16)
@@ -120,23 +114,24 @@ class Ui_MainWindow(object):
         self.progressBar.setGeometry(QtCore.QRect(660, 440, 421, 23))
         self.progressBar.setProperty("value", 24)
         self.progressBar.setObjectName("progressBar")
+
         self.StatusText = QtWidgets.QLabel(self.centralwidget)
         self.StatusText.setGeometry(QtCore.QRect(230, 440, 171, 31))
-        font = QtGui.QFont()
-        font.setFamily("Bodoni MT")
-        font.setPointSize(16)
         self.StatusText.setFont(font)
         self.StatusText.setObjectName("StatusText")
         MainWindow.setCentralWidget(self.centralwidget)
+
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1100, 21))
         self.menubar.setObjectName("menubar")
         self.menuAdd_file = QtWidgets.QMenu(self.menubar)
         self.menuAdd_file.setObjectName("menuAdd_file")
         MainWindow.setMenuBar(self.menubar)
+
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
         self.openGUIFile = QtWidgets.QAction(MainWindow)
         self.openGUIFile.setObjectName("openGUIFile")
         self.openAdjacencyMatrix = QtWidgets.QAction(MainWindow)
@@ -161,6 +156,63 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        # Listeners
+
+        self.Btn4x4.clicked.connect(self.dimensionOrDifficultyChanged)
+        self.Btn9x9.clicked.connect(self.dimensionOrDifficultyChanged)
+        self.Btn16x16.clicked.connect(self.dimensionOrDifficultyChanged)
+
+        self.BtnSimple.clicked.connect(self.dimensionOrDifficultyChanged)
+        self.BtnHard.clicked.connect(self.dimensionOrDifficultyChanged)
+        self.BtnImpossible.clicked.connect(self.dimensionOrDifficultyChanged)
+
+    # User input functions
+
+    def getDimensionFolder(self, dimension):
+        if(dimension == "1" or dimension == "4x4"):
+            dimensionFolder = "4x4"
+        elif (dimension == "2" or dimension == "9x9"):
+            dimensionFolder = "9x9"
+        else:
+            dimensionFolder = "16x16"
+        return dimensionFolder
+
+    def getFileName(self, weight):
+        if(weight == "1" or weight == "Easy"):
+            fileName = "Easy"
+        elif (weight == "2" or weight == "Hard"):
+            fileName = "Hard"
+        else:
+            fileName = "Impossible"
+        return fileName
+        
+
+    # Solving Sudoku
+
+    def solveSudoku(self, dimension, weight):
+        self.filePath = ("Sudoku/" + self.getDimensionFolder(dimension) + "/" + self.getFileName(weight) + ".csv")
+
+        # Instanciramo prazni sudoku i citamo ga iz .CSV datoteke
+        self.sud = SudokuHelper.getSudokuFromCSV(self.filePath)
+
+        self.sud.printSudoku(self.SudokuToSolve)
+
+        # Popunjavamo matricu susjedstva sudokua
+        self.sudFill = SudokuHelper.fillAdjacencyMatrix(self.sud)
+
+        # Rjesavamo sudoku i ispisujemo ga
+        self.sudFill.solveByLogic(self.OutputText, self.SudokuSolved)
+
+        #dohvaćam riješeni sudoku
+        self.sudSolved = self.sudFill.getSudoku()
+        self.dim = self.sudFill.getDimension()
+   
+        #crtanje grafa za sudoku
+        if(self.dim <= 9):
+            SudokuHelper.drawGraph(self.sudSolved, self.dim)
+        else:
+            print("\nGraph for sudoku 16x16 is too large for visual representation!\n")
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -182,6 +234,39 @@ class Ui_MainWindow(object):
         self.openVertex.setText(_translate("MainWindow", "Vertex"))
         self.openSudoku.setText(_translate("MainWindow", "Sudoku"))
         self.openDriver.setText(_translate("MainWindow", "Driver"))
+
+    def checkDifficultyAndDimension(self):
+        if((self.Btn4x4.isChecked() == True or self.Btn9x9.isChecked() == True or self.Btn16x16.isChecked() == True)
+        and (self.BtnSimple.isChecked() == True or self.BtnHard.isChecked() == True or self.BtnImpossible.isChecked() == True)):
+            return True
+        return False
+
+
+    def dimensionOrDifficultyChanged(self):
+        if(self.checkDifficultyAndDimension()):
+            dimension = self.getCheckedDimension()
+            difficulty = self.getCheckedDifficulty()
+            self.solveSudoku(dimension, difficulty)
+
+    def getCheckedDimension(self):
+        if(self.Btn4x4.isChecked() == True):
+            return "4x4"
+        elif(self.Btn9x9.isChecked() == True):
+            return "9x9"
+        elif(self.Btn16x16.isChecked() == True):
+            return "16x16" 
+        else:
+            return "None"
+    
+    def getCheckedDifficulty(self):
+        if(self.BtnSimple.isChecked() == True):
+            return "Easy"
+        elif(self.BtnHard.isChecked() == True):
+            return "Hard"
+        elif(self.BtnImpossible.isChecked() == True):
+            return "Impossible" 
+        else:
+            return "None"
 
 
 if __name__ == "__main__":

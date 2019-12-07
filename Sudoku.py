@@ -59,8 +59,8 @@ class Sudoku:
                 v.setColor(0)
         return False
 
-    def solveByLogic(self):
-        print("\nSolving logically..")
+    def solveByLogic(self, OutputText, table):
+        OutputText.append("\nSolving logically..")
         while not(self.isSolved()):
             colorFound = False
             for i in range(0, len(self.cells)):
@@ -72,15 +72,18 @@ class Sudoku:
                         v.setColor(c)
                         colorFound = True
             if (colorFound == False):
-                print("Cannot be solved by logic. Switching to backtracking recursion algorithm...")
+                OutputText.append("Cannot be solved by logic. Switching to backtracking recursion algorithm...")
                 self.solveByBacktracking()
-        print("\nDone! Solution: ")
-        print("---------------------")
-        self.printSudoku()
+        
+        OutputText.append("\nDone!")
+        OutputText.append("---------------------")
+        self.printSudoku(table)
 
-    def printSudoku(self):
+    def printSudoku(self, table):
         for arr in self.cells:
             for v in arr:
+                #table.append(v.getColor(), end=" ")
                 print(v.getColor(), end=" ")
-            print()
+            print(" ")
+            #table.append(" ")
 
