@@ -37,6 +37,9 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# Adjacency Matrix
+matrica_susjedstva.csv
+
 # Unit test / coverage reports
 htmlcov/
 .tox/

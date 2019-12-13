@@ -36,7 +36,6 @@ class SudokuHelper:
     def fillAdjacencyMatrix(sud):
         dim = sud.getDimension()
         am = AdjacencyMatrix(dim)
-        fillAM = []
         fillAM = am.getAdjacencyMatrix()
         am.save_matrix_to_csv(fillAM)
         indexRow = 0
@@ -46,7 +45,6 @@ class SudokuHelper:
             counter_c = 0
             indexRow = (counter_r) // dim
             indexColumn = (counter_r) % dim
-            currentVertex = Vertex()
             currentVertex = sud.getSudoku()[indexRow][indexColumn]
             for element in row:
                 r = 0
@@ -85,7 +83,6 @@ class SudokuHelper:
         # read adjacency matrix and create network
         network = nx.Graph()
         fileName = "matrica_susjedstva.csv"
-        adjMatrix = []
         with open(fileName, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quotechar='|')
             for indexRow, row in enumerate(reader, start = 1):                

@@ -59,7 +59,7 @@ class Sudoku:
                 v.setColor(0)
         return False
 
-    def solveByLogic(self, OutputText, table):
+    def solveByLogic(self, OutputText):
         OutputText.append("\nSolving logically..")
         while not(self.isSolved()):
             colorFound = False
@@ -77,12 +77,13 @@ class Sudoku:
         
         OutputText.append("\nDone!")
         OutputText.append("---------------------")
-        self.printSudoku(table)
+        self.printSudoku()
 
-    def printSudoku(self, table):
+    def printSudoku(self):
+        row = 0
         for arr in self.cells:
+            column = 0
             for v in arr:
-                #table.append(v.getColor(), end=" ")
                 print(v.getColor(), end=" ")
             print(" ")
             #table.append(" ")

@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'G.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.0
-#
-# WARNING! All changes made in this file will be lost!
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import warnings
 from Vertex import Vertex
@@ -22,20 +15,33 @@ class Ui_MainWindow(object):
         MainWindow.resize(1100, 744)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(220, 40, 421, 381))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.SolvingGrid = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.SolvingGrid.setContentsMargins(0, 0, 0, 0)
+        self.SolvingGrid.setObjectName("SolvingGrid")
 
-        self.SudokuToSolve = QtWidgets.QGridLayout(self.gridLayoutWidget)
-        self.SudokuToSolve.setContentsMargins(0, 0, 0, 0)
+        self.SudokuToSolve = QtWidgets.QTableWidget(self.gridLayoutWidget)
         self.SudokuToSolve.setObjectName("SudokuToSolve")
+        self.SudokuToSolve.setColumnCount(9)
+        self.SudokuToSolve.setRowCount(9)
+        self.SolvingGrid.addWidget(self.SudokuToSolve, 0, 0, 1, 1)
 
-        self.tableWidget = QtWidgets.QTableWidget(self.gridLayoutWidget)
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(0)
-        self.tableWidget.setRowCount(0)
+        self.gridLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
+        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(660, 40, 421, 381))
+        self.gridLayoutWidget_2.setObjectName("gridLayoutWidget_2")
+        self.SolvedGrid = QtWidgets.QGridLayout(self.gridLayoutWidget_2)
+        self.SolvedGrid.setContentsMargins(0, 0, 0, 0)
+        self.SolvedGrid.setObjectName("SolvedGrid")
 
-        self.SudokuToSolve.addWidget(self.tableWidget, 0, 0, 1, 1)
+        self.SudokuSolved = QtWidgets.QTableWidget(self.gridLayoutWidget_2)
+        self.SudokuSolved.setObjectName("tableWidget_2")
+        self.SudokuSolved.setColumnCount(9)
+        self.SudokuSolved.setRowCount(9)
+        self.SolvedGrid.addWidget(self.SudokuSolved, 0, 0, 1, 1)
+
         self.Dimension = QtWidgets.QGroupBox(self.centralwidget)
         self.Dimension.setGeometry(QtCore.QRect(20, 30, 191, 181))
 
@@ -81,20 +87,6 @@ class Ui_MainWindow(object):
         self.BtnHard.setFont(font)
         self.BtnHard.setObjectName("BtnHard")
 
-        self.gridLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(660, 40, 421, 381))
-        self.gridLayoutWidget_2.setObjectName("gridLayoutWidget_2")
-
-        self.SudokuSolved = QtWidgets.QGridLayout(self.gridLayoutWidget_2)
-        self.SudokuSolved.setContentsMargins(0, 0, 0, 0)
-        self.SudokuSolved.setObjectName("SudokuSolved")
-
-        self.tableWidget_2 = QtWidgets.QTableWidget(self.gridLayoutWidget_2)
-        self.tableWidget_2.setObjectName("tableWidget_2")
-        self.tableWidget_2.setColumnCount(0)
-        self.tableWidget_2.setRowCount(0)
-
-        self.SudokuSolved.addWidget(self.tableWidget_2, 0, 0, 1, 1)
         self.OutputText = QtWidgets.QTextEdit(self.centralwidget)
         self.OutputText.setGeometry(QtCore.QRect(20, 510, 1061, 181))
         self.OutputText.setObjectName("OutputText")
@@ -185,6 +177,17 @@ class Ui_MainWindow(object):
         else:
             fileName = "Impossible"
         return fileName
+
+    def printSudoku(self):
+        row = 1
+        for arr in self.sud.cells:
+            self.SudokuToSolve.insertRow(row)
+            column = 1
+            for v in arr:
+                print(f"Boja: %s %s %s" % (row, column, v.getColor()))
+                self.SudokuToSolve.setItem(row, column, QtWidgets.QTableWidgetItem(v.getColor()))
+                column += 1
+            row += 1
         
 
     # Solving Sudoku
@@ -195,19 +198,19 @@ class Ui_MainWindow(object):
         # Instanciramo prazni sudoku i citamo ga iz .CSV datoteke
         self.sud = SudokuHelper.getSudokuFromCSV(self.filePath)
 
-        self.sud.printSudoku(self.SudokuToSolve)
+        self.printSudoku()
 
         # Popunjavamo matricu susjedstva sudokua
         self.sudFill = SudokuHelper.fillAdjacencyMatrix(self.sud)
 
         # Rjesavamo sudoku i ispisujemo ga
-        self.sudFill.solveByLogic(self.OutputText, self.SudokuSolved)
+        self.sudFill.solveByLogic(self.OutputText)
 
-        #dohvaćam riješeni sudoku
+        # dohvaćam riješeni sudoku
         self.sudSolved = self.sudFill.getSudoku()
         self.dim = self.sudFill.getDimension()
    
-        #crtanje grafa za sudoku
+        # crtanje grafa za sudoku
         if(self.dim <= 9):
             SudokuHelper.drawGraph(self.sudSolved, self.dim)
         else:
@@ -236,34 +239,34 @@ class Ui_MainWindow(object):
         self.openDriver.setText(_translate("MainWindow", "Driver"))
 
     def checkDifficultyAndDimension(self):
-        if((self.Btn4x4.isChecked() == True or self.Btn9x9.isChecked() == True or self.Btn16x16.isChecked() == True)
-        and (self.BtnSimple.isChecked() == True or self.BtnHard.isChecked() == True or self.BtnImpossible.isChecked() == True)):
+        if((self.Btn4x4.isChecked() or self.Btn9x9.isChecked() or self.Btn16x16.isChecked())
+        and (self.BtnSimple.isChecked() or self.BtnHard.isChecked() or self.BtnImpossible.isChecked())):
             return True
         return False
 
 
     def dimensionOrDifficultyChanged(self):
-        if(self.checkDifficultyAndDimension()):
+        if self.checkDifficultyAndDimension():
             dimension = self.getCheckedDimension()
             difficulty = self.getCheckedDifficulty()
             self.solveSudoku(dimension, difficulty)
 
     def getCheckedDimension(self):
-        if(self.Btn4x4.isChecked() == True):
+        if self.Btn4x4.isChecked():
             return "4x4"
-        elif(self.Btn9x9.isChecked() == True):
+        elif self.Btn9x9.isChecked():
             return "9x9"
-        elif(self.Btn16x16.isChecked() == True):
+        elif self.Btn16x16.isChecked():
             return "16x16" 
         else:
             return "None"
     
     def getCheckedDifficulty(self):
-        if(self.BtnSimple.isChecked() == True):
+        if self.BtnSimple.isChecked():
             return "Easy"
-        elif(self.BtnHard.isChecked() == True):
+        elif self.BtnHard.isChecked():
             return "Hard"
-        elif(self.BtnImpossible.isChecked() == True):
+        elif self.BtnImpossible.isChecked():
             return "Impossible" 
         else:
             return "None"
