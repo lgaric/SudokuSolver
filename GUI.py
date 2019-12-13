@@ -9,6 +9,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import warnings
+import os
+from pathlib import Path
 from Vertex import Vertex
 from Sudoku import Sudoku
 from AdjacencyMatrix import AdjacencyMatrix
@@ -190,28 +192,31 @@ class Ui_MainWindow(object):
     # Solving Sudoku
 
     def solveSudoku(self, dimension, weight):
-        self.filePath = ("Sudoku/" + self.getDimensionFolder(dimension) + "/" + self.getFileName(weight) + ".csv")
+        
+        current_older = Path(__file__).parent.absolute()
+        path = ("Sudoku/" + self.getDimensionFolder(dimension) + "/" + self.getFileName(weight) + ".csv")
+        self.filePath = os.path.join(current_older, path)
 
-        # Instanciramo prazni sudoku i citamo ga iz .CSV datoteke
+        # Read sudoku from .CSV file
         self.sud = SudokuHelper.getSudokuFromCSV(self.filePath)
 
         self.sud.printSudoku(self.SudokuToSolve)
 
-        # Popunjavamo matricu susjedstva sudokua
+        # Fill adjacency matrix
         self.sudFill = SudokuHelper.fillAdjacencyMatrix(self.sud)
 
-        # Rjesavamo sudoku i ispisujemo ga
+        # Solve sudoku by logic -> if not possible switch to backtracking algorithm
         self.sudFill.solveByLogic(self.OutputText, self.SudokuSolved)
 
-        #dohvaćam riješeni sudoku
+        # Get solved sudoku
         self.sudSolved = self.sudFill.getSudoku()
         self.dim = self.sudFill.getDimension()
    
-        #crtanje grafa za sudoku
+        # If sudoku dimensions are 4x4 or 9x9 draw graphical representation of sudoku
         if(self.dim <= 9):
             SudokuHelper.drawGraph(self.sudSolved, self.dim)
         else:
-            print("\nGraph for sudoku 16x16 is too large for visual representation!\n")
+            self.OutputText.append("\nGraph for sudoku 16x16 is too large for visual representation!\n")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
